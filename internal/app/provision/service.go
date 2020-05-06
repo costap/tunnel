@@ -1,19 +1,18 @@
-package tunnel
+package provision
 
 import (
 	"fmt"
 	"github.com/costap/tunnel/internal/pkg/hosting"
 )
 
-type Tunnel struct {
-
+type ProvisionService struct {
 }
 
-func NewTunnel() *Tunnel {
-	return &Tunnel{}
+func NewProvisionService() *ProvisionService {
+	return &ProvisionService{}
 }
 
-func (*Tunnel) CreateHosting(){
+func (*ProvisionService) CreateHosting() {
 	p := hosting.NewDOProvider()
 
 	ip, err := p.CreateInstance()

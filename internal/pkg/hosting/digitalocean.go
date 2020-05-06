@@ -8,11 +8,11 @@ import (
 )
 
 type DigitalOcean struct {
-	token string
+	token  string
 	region string
-	name string
-	size string
-	image string
+	name   string
+	size   string
+	image  string
 	client *godo.Client
 }
 
@@ -22,7 +22,7 @@ func NewDOProvider() *DigitalOcean {
 	return &DigitalOcean{
 		token:  t,
 		region: "lon1",
-		name:   "tunnel-droplet",
+		name:   "provision-droplet",
 		size:   "s-1vcpu-1gb",
 		image:  "ubuntu-18-04-x64",
 		client: godo.NewFromToken(t),
