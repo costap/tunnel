@@ -1,0 +1,56 @@
+package tunneld
+
+import (
+	"github.com/costap/tunnel/internal/pkg/tunnel"
+	"golang.org/x/crypto/ssh"
+	"log"
+	"os"
+)
+
+type Server struct{
+	running bool
+	started bool
+	config *SSHConfig
+}
+
+func NewServer(config *SSHConfig) *Server {
+	return &Server{running: false, started: false, config: config}
+}
+
+func (s *Server) Run(){
+	s.running = true
+
+	for s.running {
+		tunnel := tunnel.NewSSHTunnel(
+			s.config.SSHServer,
+			ssh.Password(s.config.Password),
+			s.config.RemoteAddr,
+			s.config.LocalAddr,
+		)
+
+		tunnel.Log = log.New(os.Stdout, "", log.Ldate|log.Lmicroseconds)
+
+		go tunnel.Start()
+		s.started = true
+		sshClient := <-tunnel.C
+		err := sshClient.Conn.Wait()
+		s.started = false
+		if err != nil {
+			tunnel.Log.Printf("server connection closed with error %v", err)
+		}
+	}
+}
+
+func (s *Server) Stop() {
+	s.running = false
+
+	// TODO: close ssh connection and interrupt main thread.
+}
+
+func (s *Server) IsRunning() bool {
+	return s.running
+}
+
+func (s *Server) IsStarted() bool {
+	return s.started
+}
