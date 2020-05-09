@@ -24,7 +24,7 @@ func main() {
 	http.HandleFunc("/health", health)
 	http.HandleFunc("/stop", stop)
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v",c.AdminPort), nil))
 }
 
 func index(w http.ResponseWriter, r *http.Request) {

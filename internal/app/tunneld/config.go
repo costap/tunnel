@@ -15,23 +15,16 @@ const (
 	TCP
 )
 
-type Config interface {
-	GetMode() Mode
-}
-
-type SSHConfig struct {
+type Config struct {
 	Password   string
 	Cert       string
 	SSHServer  string
 	RemoteAddr string
 	LocalAddr  string
+	AdminPort  int
 }
 
-func (*SSHConfig) GetMode() Mode {
-	return SSH
-}
-
-func ConfigInit() *SSHConfig {
+func ConfigInit() *Config {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
@@ -54,10 +47,11 @@ func ConfigInit() *SSHConfig {
 	flag.String("remoteAddr", "0.0.0.0:8080", "remote interface and port to listen on")
 	flag.String("localAddr", "", "local address to connect through the tunnel")
 	flag.String("type", "ssh", "type of tunnel, only ssh is currently supported")
+	flag.Int("adminPort", 8080, "admin port")
 	flag.Parse()
 	viper.BindPFlags(flag.CommandLine)
 
-	var c SSHConfig
+	var c Config
 
 	if err := viper.Unmarshal(&c); err != nil {
 		log.Fatalf("unable to decode into struct, %v", err)
