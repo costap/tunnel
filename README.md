@@ -1,6 +1,6 @@
 # Tunnel 
 
-Tunnel is a project to create tunnels to your local host automatically.
+Tunnel is a project to create L4 tunnels to your local host automatically.
 
 ## How it works
 
@@ -45,7 +45,15 @@ nohup tunneld -c ~/.ssh/id_rsa_tunnel \
   --remoteAddr 0.0.0.0:16443 \
   --adminPort 8081 > /dev/null 2>&1 & 
 ```
-5. Enjoy!
+
+5. Check tunnels are ok
+```shell script
+$ curl http://localhost:8080/health
+{ "started": true }                                                                                                                                                       
+$ curl http://localhost:8081/health
+{ "started": true }
+```
+6. Enjoy!
 
 ## Build
 
