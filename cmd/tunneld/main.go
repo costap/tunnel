@@ -13,6 +13,8 @@ func main() {
 
 	c := tunneld.ConfigInit()
 
+	fmt.Printf("Starting with config %v", c)
+
 	s = tunneld.NewServer(c)
 
 	go s.Run()

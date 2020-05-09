@@ -44,11 +44,14 @@ func ConfigInit() *SSHConfig {
 	viper.SetEnvPrefix("tunneld")
 	viper.AutomaticEnv()
 
+	viper.RegisterAlias("remote", "remoteAddr")
+	viper.RegisterAlias("local", "localAddr")
+
 	flag.StringP("password", "p", "", "password for the ssh server")
 	flag.StringP("cert", "c", "", "path to the cert for ssh login")
 	flag.String("sshServer", "", "ssh server to open tunnel to")
-	flag.String("remote", "0.0.0.0:8080", "remote interface and port to listen on")
-	flag.String("local", "", "local address to connect through the tunnel")
+	flag.String("remoteAddr", "0.0.0.0:8080", "remote interface and port to listen on")
+	flag.String("localAddr", "", "local address to connect through the tunnel")
 	flag.String("type", "ssh", "type of tunnel, only ssh is currently supported")
 	flag.Parse()
 	viper.BindPFlags(flag.CommandLine)
