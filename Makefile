@@ -18,7 +18,7 @@ clean: ## Clean the project tree from binary files.
 	rm -rf bin/*
 
 authorsfile: ## Update the AUTHORS file from the git logs
-	git log --all --format='%aN <%cE>' | sort -u | egrep -v "noreply|mailchimp|@Kris" > AUTHORS
+	git log -n 1 --format='%aN <%cE>' | sort -u | egrep -v "noreply|mailchimp|@Kris" > AUTHORS
 
 vet: ## apply go vet to all the Go files
 	@go vet $(PKGS)
