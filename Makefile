@@ -18,6 +18,10 @@ install: ## Create the tunnel executable in $GOPATH/bin directory.
 clean: ## Clean the project tree from binary files.
 	rm -rf bin/*
 
+.PHONY: test
+test: ## Run the tests.
+	go test -v $(PKGS)
+
 authorsfile: ## Update the AUTHORS file from the git logs
 	git log -n 1 --format='%aN <%cE>' | sort -u | egrep -v "noreply|mailchimp|@Kris" > AUTHORS
 

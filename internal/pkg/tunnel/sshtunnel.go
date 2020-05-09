@@ -54,7 +54,7 @@ type SSHTunnel struct {
 
 func (t *SSHTunnel) logf(fmt string, args ...interface{}) {
 	if t.Log != nil {
-		t.Log.Printf(fmt, args)
+		t.Log.Printf(fmt, args...)
 	}
 }
 
