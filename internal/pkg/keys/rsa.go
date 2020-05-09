@@ -22,8 +22,12 @@ func GenerateKeyPair(path, name string) error {
 		return fmt.Errorf("error generating rsa key %w", err)
 	}
 
-	err = savePEMKey(filepath.Join(path, name), key)
-	if err != nil {
+	return SaveKeyPair(key, path, name)
+}
+
+func SaveKeyPair(key *rsa.PrivateKey, path, name string) error {
+
+	if err := savePEMKey(filepath.Join(path, name), key); err != nil {
 		return fmt.Errorf("error saving pem private key: %w", err)
 	}
 
@@ -32,8 +36,7 @@ func GenerateKeyPair(path, name string) error {
 		return fmt.Errorf("error generatin public key bytes: %w", err)
 	}
 
-	err = writeKeyToFile(pubBytes, filepath.Join(path, name + ".pub"))
-	if err != nil {
+	if err := writeKeyToFile(pubBytes, filepath.Join(path, name + ".pub")); err != nil {
 		return fmt.Errorf("error saving pem public key: %w", err)
 	}
 
@@ -83,4 +86,12 @@ func savePEMKey(fileName string, key *rsa.PrivateKey) error {
 	}
 
 	return nil
+}
+
+func ReadPublicKey(path, name string) (string, error) {
+	bytes, err := ioutil.ReadFile(filepath.Join(path, name + ".pub"))
+	if err != nil {
+		return "", fmt.Errorf("error reading public key %w", err)
+	}
+	return string(bytes), nil
 }

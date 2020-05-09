@@ -2,65 +2,41 @@
 
 Tunnel is a project to create tunnels to your local host automatically.
 
+## How it works
+
+The `tunnelctl` create host command will provision a new server in DigitalOcean and install [envoy]()
+ to proxy the defined ports to a internal port.
+ 
+Running `tunneld` from you local machine you want to expose will maintain and ssh tunnel to the DO host on the defined
+ports and proxy all requests through to your local address.
+
 ## Project structure
 
 [layout](https://github.com/golang-standards/project-layout)
 
+## Install
+
+```shell script
+go get github.com/costap/tunnel
+```
+
 ## Usage
 
-1. Setup a config file in 
-1. Create entry host in DO
+The below example will proxy ports 443 and 6443 from the external host to local addresses 192.168.0.26:443 and 
+192.168.0.26:6443
+
+1. Setup a config file in `~/.tunnelctl.yaml` like `configs/tunnelctl.yaml`.
+1. Create ssh keys pair if you don't have one.
 ```shell script
-tunnelctl hosts create --proxy 443:10443 --proxy 6443:16443 --name tunnel-proxy
+tunnelctl keys create -p ~/.ssh -n id_rsa_tunnel.
 ```
-
-2. On the remote host (install envoy)[https://www.getenvoy.io/install/envoy/ubuntu/]
-
-`apt-get update`
-
-```
-apt-get install -y \
- apt-transport-https \
- ca-certificates \
- curl \
- gnupg-agent \
- software-properties-common
-```
-
-`curl -sL 'https://getenvoy.io/gpg' | sudo apt-key add -`
-
+1. Create entry host in DO (assuming you want to expose 443 and 6443 in host)
 ```shell script
-add-apt-repository \
-  "deb [arch=amd64] https://dl.bintray.com/tetrate/getenvoy-deb \
-  $(lsb_release -cs) \
-  stable"
+tunnelctl hosts create -p ~/.ssh --sshName id_rsa_tunnel --proxy 443:10443 --proxy 6443:16443 --name tunnel-proxy
 ```
-
-`sudo apt-get update && sudo apt-get install -y getenvoy-envoy`
-
-`envoy --version`
-
-*OR*
-
+Take note of new host external IP and replace <NEWHOSTIP> next.
+1. Start the tunnels
 ```shell script
-curl -L https://getenvoy.io/cli | bash -s -- -b /usr/local/bin
-getenvoy run standard:1.14.1 -- --config-path tcp-proxy.yaml
-```
-
-3. On the master pi run the tunnel
-
-`ssh -N -R <remoteport>:localhost:<localport> user@server >/dev/null 2>&1 &`
-
-```shell script
-nohup ssh -N -R 16443:localhost:6443 root@134.122.111.207
-<enter password>
-ctrl-Z
-bg
-```
-
-```
-To prevent all your clients from timing out you need to edit /etc/sshd_config which is the server side configuration file add these two options:
-
-ClientAliveInterval 120
-ClientAliveCountMax 720
+tunneld -c ~/.ssh/id_rsa_tunnel --sshServer root@<NEWHOSTIP> --localAddr 192.168.0.26:443 --remoteAddr 0.0.0.0:10443 
+tunneld -c ~/.ssh/id_rsa_tunnel --sshServer root@<NEWHOSTIP> --localAddr 192.168.0.26:6443 --remoteAddr 0.0.0.0:16443 
 ```
