@@ -1,6 +1,6 @@
 PKGS=$(shell go list ./... | grep -v /vendor)
 PWD=$(shell pwd)
-GOBUILD=go build -o bin/
+GOBUILD=go build -o ./bin/
 
 default: authorsfile compile
 
