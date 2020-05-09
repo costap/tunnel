@@ -6,9 +6,13 @@ Tunnel is a project to create tunnels to your local host automatically.
 
 [layout](https://github.com/golang-standards/project-layout)
 
-## Install
+## Usage
 
-1. Create remote host
+1. Setup a config file in 
+1. Create entry host in DO
+```shell script
+tunnelctl hosts create --proxy 443:10443 --proxy 6443:16443 --name tunnel-proxy
+```
 
 2. On the remote host (install envoy)[https://www.getenvoy.io/install/envoy/ubuntu/]
 
