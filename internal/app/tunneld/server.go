@@ -11,10 +11,10 @@ import (
 type Server struct {
 	running bool
 	started bool
-	config  *SSHConfig
+	config  *Config
 }
 
-func NewServer(config *SSHConfig) *Server {
+func NewServer(config *Config) *Server {
 	return &Server{running: false, started: false, config: config}
 }
 
