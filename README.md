@@ -39,7 +39,7 @@ nohup tunneld -c ~/.ssh/id_rsa_tunnel \
   --localAddr 192.168.0.26:443 \
   --remoteAddr 0.0.0.0:10443 \
   --adminPort 8080 > /dev/null 2>&1 & 
-tunneld -c ~/.ssh/id_rsa_tunnel \
+nohup tunneld -c ~/.ssh/id_rsa_tunnel \
   --sshServer root@<NEWHOSTIP> \
   --localAddr 192.168.0.26:6443 \
   --remoteAddr 0.0.0.0:16443 \
