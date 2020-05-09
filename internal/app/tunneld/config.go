@@ -2,9 +2,10 @@ package tunneld
 
 import (
 	"fmt"
+	"log"
+
 	flag "github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"log"
 )
 
 type Mode int

@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -12,9 +13,9 @@ import (
 var cfgFile string
 
 var rootCmd = &cobra.Command{
-	Use:   "tunnelctl",
-	Short: "A command line tool for tunnel",
-	Long: "",
+	Use:              "tunnelctl",
+	Short:            "A command line tool for tunnel",
+	Long:             "",
 	TraverseChildren: true,
 }
 

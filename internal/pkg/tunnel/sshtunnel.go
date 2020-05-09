@@ -2,13 +2,14 @@ package tunnel
 
 import (
 	"fmt"
-	"golang.org/x/crypto/ssh"
 	"io"
 	"io/ioutil"
 	"log"
 	"net"
 	"strconv"
 	"strings"
+
+	"golang.org/x/crypto/ssh"
 )
 
 type Endpoint struct {

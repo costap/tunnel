@@ -6,12 +6,12 @@ import (
 )
 
 type TCPProxy struct {
-	Name string
+	Name                      string
 	ListenerPort, ClusterPort int
 }
 type Config struct {
 	tcpProxies []TCPProxy
-	adminPort int
+	adminPort  int
 }
 
 func NewConfig() *Config {
@@ -45,7 +45,6 @@ func (c *Config) ToYaml() string {
 	}
 	return buff.String()
 }
-
 
 const templateString = `
 static_resources:

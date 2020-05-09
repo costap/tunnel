@@ -1,23 +1,24 @@
 package tunneld
 
 import (
-	"github.com/costap/tunnel/internal/pkg/tunnel"
-	"golang.org/x/crypto/ssh"
 	"log"
 	"os"
+
+	"github.com/costap/tunnel/internal/pkg/tunnel"
+	"golang.org/x/crypto/ssh"
 )
 
-type Server struct{
+type Server struct {
 	running bool
 	started bool
-	config *SSHConfig
+	config  *SSHConfig
 }
 
 func NewServer(config *SSHConfig) *Server {
 	return &Server{running: false, started: false, config: config}
 }
 
-func (s *Server) Run(){
+func (s *Server) Run() {
 	s.running = true
 
 	for s.running {

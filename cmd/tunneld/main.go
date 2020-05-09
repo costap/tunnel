@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/costap/tunnel/internal/app/tunneld"
 	"log"
 	"net/http"
+
+	"github.com/costap/tunnel/internal/app/tunneld"
 )
 
 var s *tunneld.Server
@@ -21,19 +22,19 @@ func main() {
 
 	http.HandleFunc("/", index)
 	http.HandleFunc("/health", health)
-	http.HandleFunc( "/stop", stop)
+	http.HandleFunc("/stop", stop)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func index(w http.ResponseWriter, r *http.Request){
+func index(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Method not supported.", http.StatusMethodNotAllowed)
 	}
 	fmt.Fprint(w, "OK")
 }
 
-func health(w http.ResponseWriter, r *http.Request){
+func health(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Method not supported.", http.StatusMethodNotAllowed)
 	}
@@ -44,7 +45,7 @@ func health(w http.ResponseWriter, r *http.Request){
 	}
 }
 
-func stop(w http.ResponseWriter, r *http.Request){
+func stop(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, "Method not supported.", http.StatusMethodNotAllowed)
 	}

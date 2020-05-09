@@ -8,7 +8,7 @@ import (
 var keysCmd = &cobra.Command{
 	Use:   "keys",
 	Short: "Commands to manage keys",
-	Long: "",
+	Long:  "",
 }
 
 func init() {

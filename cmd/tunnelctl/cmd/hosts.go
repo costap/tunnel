@@ -8,7 +8,7 @@ import (
 var hostsCmd = &cobra.Command{
 	Use:   "hosts",
 	Short: "Commands to manage hosts",
-	Long: "",
+	Long:  "",
 }
 
 func init() {

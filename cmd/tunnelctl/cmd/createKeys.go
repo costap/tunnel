@@ -1,8 +1,9 @@
 package cmd
 
 import (
-	"github.com/costap/tunnel/internal/pkg/keys"
 	"log"
+
+	"github.com/costap/tunnel/internal/pkg/keys"
 
 	"github.com/spf13/cobra"
 )
@@ -11,7 +12,7 @@ import (
 var createKeysCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new ssh keys pair",
-	Long: "",
+	Long:  "",
 	Run: func(cmd *cobra.Command, args []string) {
 		p := cmd.Flag("path").Value.String()
 		n := cmd.Flag("name").Value.String()

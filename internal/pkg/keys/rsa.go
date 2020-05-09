@@ -6,11 +6,12 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
-	"golang.org/x/crypto/ssh"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
+
+	"golang.org/x/crypto/ssh"
 )
 
 func GenerateKeyPair(path, name string) error {
@@ -36,7 +37,7 @@ func SaveKeyPair(key *rsa.PrivateKey, path, name string) error {
 		return fmt.Errorf("error generatin public key bytes: %w", err)
 	}
 
-	if err := writeKeyToFile(pubBytes, filepath.Join(path, name + ".pub")); err != nil {
+	if err := writeKeyToFile(pubBytes, filepath.Join(path, name+".pub")); err != nil {
 		return fmt.Errorf("error saving pem public key: %w", err)
 	}
 
@@ -89,7 +90,7 @@ func savePEMKey(fileName string, key *rsa.PrivateKey) error {
 }
 
 func ReadPublicKey(path, name string) (string, error) {
-	bytes, err := ioutil.ReadFile(filepath.Join(path, name + ".pub"))
+	bytes, err := ioutil.ReadFile(filepath.Join(path, name+".pub"))
 	if err != nil {
 		return "", fmt.Errorf("error reading public key %w", err)
 	}

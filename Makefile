@@ -1,4 +1,5 @@
 PKGS=$(shell go list ./... | grep -v /vendor)
+FMT_PKGS=$(shell go list -f {{.Dir}} ./... | grep -v vendor | grep -v test | tail -n +2)
 PWD=$(shell pwd)
 GOBUILD=go build -o ./bin/
 
@@ -22,3 +23,27 @@ authorsfile: ## Update the AUTHORS file from the git logs
 
 vet: ## apply go vet to all the Go files
 	@go vet $(PKGS)
+
+gofmt: install-tools ## Go fmt your code
+	echo "Fixing format of go files..."; \
+	for package in $(FMT_PKGS); \
+	do \
+		gofmt -w $$package ; \
+		goimports -l -w $$package ; \
+	done
+
+.PHONY: install-tools
+install-tools:
+	GOIMPORTS_CMD=$(shell command -v goimports 2> /dev/null)
+ifndef GOIMPORTS_CMD
+	go get golang.org/x/tools/cmd/goimports
+endif
+
+	GOLINT_CMD=$(shell command -v golint 2> /dev/null)
+ifndef GOLINT_CMD
+	go get golang.org/x/lint/golint
+endif
+
+.PHONY: help
+help:  ## Show help messages for make targets
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}'

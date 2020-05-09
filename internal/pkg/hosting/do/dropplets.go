@@ -3,10 +3,11 @@ package do
 import (
 	"context"
 	"fmt"
-	"github.com/costap/tunnel/internal/pkg/envoy"
-	"github.com/digitalocean/godo"
 	"log"
 	"time"
+
+	"github.com/costap/tunnel/internal/pkg/envoy"
+	"github.com/digitalocean/godo"
 )
 
 const DefaultSize = "s-1vcpu-1gb"
@@ -27,17 +28,17 @@ type HostConfig struct {
 
 func NewHostConfig(region, name, image, sshKeysPath, sshKeyName string) *HostConfig {
 	return &HostConfig{
-		region: region,
-		name: name,
-		image: image,
+		region:      region,
+		name:        name,
+		image:       image,
 		sshKeysPath: sshKeysPath,
-		sshKeyName: sshKeyName,
-		size: DefaultSize,
-		proxies: []Proxy{},
+		sshKeyName:  sshKeyName,
+		size:        DefaultSize,
+		proxies:     []Proxy{},
 	}
 }
 
-func (c *HostConfig) SetHostName(name string){
+func (c *HostConfig) SetHostName(name string) {
 	c.name = name
 }
 
