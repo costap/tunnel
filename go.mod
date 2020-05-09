@@ -4,5 +4,12 @@ go 1.14
 
 require (
 	github.com/digitalocean/godo v1.35.1
+	github.com/mitchellh/go-homedir v1.1.0
+	github.com/spf13/cobra v1.0.0
+	github.com/spf13/pflag v1.0.5
+	github.com/spf13/viper v1.6.3
 	golang.org/x/crypto v0.0.0-20200429183012-4b2356b1ed79
+	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
+	golang.org/x/tools v0.0.0-20200509030707-2212a7e161a5 // indirect
+	gopkg.in/yaml.v2 v2.2.4
 )

@@ -2,13 +2,14 @@ package tunnel
 
 import (
 	"fmt"
-	"golang.org/x/crypto/ssh"
 	"io"
 	"io/ioutil"
 	"log"
 	"net"
 	"strconv"
 	"strings"
+
+	"golang.org/x/crypto/ssh"
 )
 
 type Endpoint struct {
@@ -124,7 +125,7 @@ func PrivateKeyFile(file string) ssh.AuthMethod {
 	return ssh.PublicKeys(key)
 }
 
-// NewSSHTunnel creates a new ssh provision to sshServer and asks the server to start listening on remote interface
+// NewSSHTunnel creates a new ssh tunnelctl to sshServer and asks the server to start listening on remote interface
 // Will forward and connections to local
 func NewSSHTunnel(sshServer string, auth ssh.AuthMethod, remote string, local string) *SSHTunnel {
 	localEndpoint := NewEndpoint(local)

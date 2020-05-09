@@ -2,61 +2,42 @@
 
 Tunnel is a project to create tunnels to your local host automatically.
 
-## Project structure
+## How it works
 
-[layout](https://github.com/golang-standards/project-layout)
+The `tunnelctl create host` command will provision a new server in DigitalOcean and install [envoy](https://www.envoyproxy.io/);
+ this will be your public proxy and will be configured to forward requests to an internal port.
+ 
+Once the public host is created, from the local machine you want to expose, running `tunneld` will create and maintain 
+a ssh tunnel to the public host to tunnel the requests from envoy to your local address.
 
 ## Install
 
-1. Create remote host
-
-2. On the remote host (install envoy)[https://www.getenvoy.io/install/envoy/ubuntu/]
-
-`apt-get update`
-
-```
-apt-get install -y \
- apt-transport-https \
- ca-certificates \
- curl \
- gnupg-agent \
- software-properties-common
-```
-
-`curl -sL 'https://getenvoy.io/gpg' | sudo apt-key add -`
-
 ```shell script
-add-apt-repository \
-  "deb [arch=amd64] https://dl.bintray.com/tetrate/getenvoy-deb \
-  $(lsb_release -cs) \
-  stable"
+go get github.com/costap/tunnel
 ```
 
-`sudo apt-get update && sudo apt-get install -y getenvoy-envoy`
+## Usage
 
-`envoy --version`
+The below example will proxy ports 443 and 6443 from the public host to local addresses 192.168.0.26:443 and 
+192.168.0.26:6443.
 
-*OR*
-
+1. setup a config file in `~/.tunnelctl.yaml` like `configs/tunnelctl.yaml`
+2. create ssh keys pair if you don't have one
 ```shell script
-curl -L https://getenvoy.io/cli | bash -s -- -b /usr/local/bin
-getenvoy run standard:1.14.1 -- --config-path tcp-proxy.yaml
+tunnelctl keys create -p ~/.ssh -n id_rsa_tunnel
 ```
-
-3. On the master pi run the tunnel
-
-`ssh -N -R <remoteport>:localhost:<localport> user@server >/dev/null 2>&1 &`
-
+3. create public host in DO
 ```shell script
-nohup ssh -N -R 16443:localhost:6443 root@134.122.111.207
-<enter password>
-ctrl-Z
-bg
+tunnelctl hosts create -p ~/.ssh --sshName id_rsa_tunnel --proxy 443:10443 --proxy 6443:16443 --name tunnel-proxy
+```
+_take note of new host external IP and replace <NEWHOSTIP> below_
+
+4. start the tunnels
+```shell script
+tunneld -c ~/.ssh/id_rsa_tunnel --sshServer root@<NEWHOSTIP> --localAddr 192.168.0.26:443 --remoteAddr 0.0.0.0:10443 
+tunneld -c ~/.ssh/id_rsa_tunnel --sshServer root@<NEWHOSTIP> --localAddr 192.168.0.26:6443 --remoteAddr 0.0.0.0:16443 
 ```
 
-```
-To prevent all your clients from timing out you need to edit /etc/sshd_config which is the server side configuration file add these two options:
+## Build
 
-ClientAliveInterval 120
-ClientAliveCountMax 720
-```
+To build the project locally simply run `make`.
