@@ -1,15 +1,15 @@
 PKGS=$(shell go list ./... | grep -v /vendor)
 FMT_PKGS=$(shell go list -f {{.Dir}} ./... | grep -v vendor | grep -v test | tail -n +2)
 PWD=$(shell pwd)
-GOBUILD=go build -o ./bin/
+GOBUILD=go build -o ./bin
 
 default: authorsfile compile
 
 all: default install
 
 compile: ## Create tunnel executables in the ./bin directory
-	${GOBUILD} ./cmd/tunnelctl
-	${GOBUILD} ./cmd/tunneld
+	${GOBUILD}/tunnelctl ./cmd/tunnelctl
+	${GOBUILD}/tunneld ./cmd/tunneld
 
 install: ## Create the tunnel executable in $GOPATH/bin directory.
 	install -m 0755 bin/tunnelctl ${GOPATH}/bin/tunnelctl
