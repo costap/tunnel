@@ -1,6 +1,6 @@
 # Tunnel 
 
-Tunnel is a project to create L4 tunnels to your local host automatically.
+Tunnel is a project written in go to create L4 tunnels to your local host automatically.
 
 ## How it works
 
@@ -32,7 +32,7 @@ tunnelctl hosts create -p ~/.ssh --sshName id_rsa_tunnel --proxy 443:10443 --pro
 ```
 _take note of new host external IP and replace <NEWHOSTIP> below_
 
-4. start the tunnels
+4. start the tunnels on your local machine
 ```shell script
 nohup tunneld -c ~/.ssh/id_rsa_tunnel \
   --sshServer root@<NEWHOSTIP> \
