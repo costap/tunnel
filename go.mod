@@ -9,4 +9,5 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.6.3
 	golang.org/x/crypto v0.0.0-20200429183012-4b2356b1ed79
+	gopkg.in/yaml.v2 v2.2.4
 )

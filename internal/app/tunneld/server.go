@@ -21,9 +21,15 @@ func (s *Server) Run(){
 	s.running = true
 
 	for s.running {
+		var auth ssh.AuthMethod
+		if s.config.Cert != "" {
+			auth = tunnel.PrivateKeyFile(s.config.Cert)
+		} else {
+			auth = ssh.Password(s.config.Password)
+		}
 		tunnel := tunnel.NewSSHTunnel(
 			s.config.SSHServer,
-			ssh.Password(s.config.Password),
+			auth,
 			s.config.RemoteAddr,
 			s.config.LocalAddr,
 		)

@@ -13,9 +13,4 @@ var hostsCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(hostsCmd)
-
-	hostsCmd.Flags().StringP("region", "r", "lon1", "Region for the host")
-	hostsCmd.Flags().StringP("token", "t", "", "API token for provisioning host")
-	hostsCmd.Flags().StringP("token", "t", "", "API token for provisioning host")
-	hostsCmd.Flags().StringP("token", "t", "", "API token for provisioning host")
 }

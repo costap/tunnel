@@ -4,6 +4,7 @@ import (
 	"fmt"
 	flag "github.com/spf13/pflag"
 	"github.com/spf13/viper"
+	"log"
 )
 
 type Mode int
@@ -36,9 +37,8 @@ func ConfigInit() *SSHConfig {
 	viper.AddConfigPath("/etc/tunneld/")
 	viper.AddConfigPath("$HOME/.tunneld")
 
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil {             // Handle errors reading the config file
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	if err := viper.ReadInConfig(); err != nil {
+		fmt.Printf("Error reading config file: %v \n", err)
 	}
 
 	viper.SetEnvPrefix("tunneld")
@@ -54,9 +54,9 @@ func ConfigInit() *SSHConfig {
 	viper.BindPFlags(flag.CommandLine)
 
 	var c SSHConfig
-	err = viper.Unmarshal(&c)
-	if err != nil {
-		t.Fatalf("unable to decode into struct, %v", err)
+
+	if err := viper.Unmarshal(&c); err != nil {
+		log.Fatalf("unable to decode into struct, %v", err)
 	}
 
 	return &c

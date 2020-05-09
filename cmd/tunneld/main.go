@@ -42,7 +42,7 @@ func health(w http.ResponseWriter, r *http.Request){
 	}
 }
 
-func stop(w http.ResponseWriter, _ *http.Request){
+func stop(w http.ResponseWriter, r *http.Request){
 	if r.Method != "POST" {
 		http.Error(w, "Method not supported.", http.StatusMethodNotAllowed)
 	}
