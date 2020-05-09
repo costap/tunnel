@@ -4,15 +4,11 @@ Tunnel is a project to create tunnels to your local host automatically.
 
 ## How it works
 
-The `tunnelctl` create host command will provision a new server in DigitalOcean and install [envoy](https://www.envoyproxy.io/)
- to proxy the defined ports to a internal port.
+The `tunnelctl create host` command will provision a new server in DigitalOcean and install [envoy](https://www.envoyproxy.io/);
+ this will be your public proxy and will be configured to forward requests to an internal port.
  
-Running `tunneld` from you local machine you want to expose will maintain and ssh tunnel to the DO host on the defined
-ports and proxy all requests through to your local address.
-
-## Project structure
-
-[layout](https://github.com/golang-standards/project-layout)
+Once the public host is created, from the local machine you want to expose, running `tunneld` will create and maintain 
+a ssh tunnel to the public host to tunnel the requests from envoy to your local address.
 
 ## Install
 
@@ -35,8 +31,13 @@ tunnelctl keys create -p ~/.ssh -n id_rsa_tunnel
 tunnelctl hosts create -p ~/.ssh --sshName id_rsa_tunnel --proxy 443:10443 --proxy 6443:16443 --name tunnel-proxy
 ```
 _take note of new host external IP and replace <NEWHOSTIP> below_
+
 4. start the tunnels
 ```shell script
 tunneld -c ~/.ssh/id_rsa_tunnel --sshServer root@<NEWHOSTIP> --localAddr 192.168.0.26:443 --remoteAddr 0.0.0.0:10443 
 tunneld -c ~/.ssh/id_rsa_tunnel --sshServer root@<NEWHOSTIP> --localAddr 192.168.0.26:6443 --remoteAddr 0.0.0.0:16443 
 ```
+
+## Build
+
+To build the project locally simply run `make`.
