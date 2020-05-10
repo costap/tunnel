@@ -13,7 +13,7 @@ a ssh tunnel to the public host to tunnel the requests from envoy to your local 
 ## Install
 
 ```shell script
-curl -L https://raw.githubusercontent.com/costap/tunnel/master/scripts/install.sh | sh -
+curl -L https://raw.githubusercontent.com/costap/tunnel/master/scripts/install.sh | sudo bash -
 ```
 
 ## Usage
@@ -36,12 +36,12 @@ _take note of new host external IP and replace <NEWHOSTIP> below_
 ```shell script
 nohup tunneld -c ~/.ssh/id_rsa_tunnel \
   --sshServer root@<NEWHOSTIP> \
-  --localAddr 192.168.0.26:443 \
+  --localAddr 127.0.0.1:443 \
   --remoteAddr 0.0.0.0:10443 \
   --adminPort 8080 > /dev/null 2>&1 & 
 nohup tunneld -c ~/.ssh/id_rsa_tunnel \
   --sshServer root@<NEWHOSTIP> \
-  --localAddr 192.168.0.26:6443 \
+  --localAddr 127.0.0.1:6443 \
   --remoteAddr 0.0.0.0:16443 \
   --adminPort 8081 > /dev/null 2>&1 & 
 ```
@@ -56,9 +56,9 @@ $ curl http://localhost:8081/health
 
 5. Check external endpoints
 ```shell script
-$ curl https://<NEWHOSTIP>/
+$ curl https://<NEWHOSTIP>/ -k
                                                                                                                                                 
-$ curl http://<NEWHOSTIP>:6443/
+$ curl https://<NEWHOSTIP>:6443/ -k
 ```
 
 6. Enjoy!
