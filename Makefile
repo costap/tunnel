@@ -2,6 +2,7 @@ PKGS=$(shell go list ./... | grep -v /vendor)
 FMT_PKGS=$(shell go list -f {{.Dir}} ./... | grep -v vendor | grep -v test | tail -n +2)
 PWD=$(shell pwd)
 GOBUILD=go build -o ./bin
+TAG=$(shell git describe --abbrev=0 --tags)
 
 default: authorsfile compile
 
@@ -17,6 +18,7 @@ install: ## Create the tunnel executable in $GOPATH/bin directory.
 
 clean: ## Clean the project tree from binary files.
 	rm -rf bin/*
+	rm -rf dist/*
 
 .PHONY: test
 test: ## Run the tests.
@@ -35,6 +37,31 @@ gofmt: install-tools ## Go fmt your code
 		gofmt -w $$package ; \
 		goimports -l -w $$package ; \
 	done
+# versioning
+bump-major:
+	./scripts/bump-version.sh major
+
+bump-minor:
+	./scripts/bump-version.sh minor
+
+bump-patch:
+	./scripts/bump-version.sh patch
+
+.PHONY: release
+release: dist
+	git commit -am "Bumps version"
+	git flow release start $(shell cat ./VERSION)
+	git flow release finish $(shell cat ./VERSION)
+	ghr $(shell cat ./VERSION) dist/
+
+release-major: bump-major release ## Creates a new major release in github
+
+release-minor: bump-minor release ## Creates a new minor release in github
+
+release-patch: bump-patch release ## Creates a new patch release in github
+
+dist: install-tools ## Creates binaries in multiple architectures for distribution
+	gox -output="dist/{{.Dir}}_{{.OS}}_{{.Arch}}" -arch="amd64 386 arm" ./...
 
 .PHONY: install-tools
 install-tools:
