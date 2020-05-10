@@ -13,7 +13,7 @@ a ssh tunnel to the public host to tunnel the requests from envoy to your local 
 ## Install
 
 ```shell script
-go get -u github.com/costap/tunnel
+curl -L https://raw.githubusercontent.com/costap/tunnel/master/scripts/install.sh | sh -
 ```
 
 ## Usage
