@@ -56,9 +56,9 @@ $ curl http://localhost:8081/health
 
 5. Check external endpoints
 ```shell script
-$ curl https://<NEWHOSTIP>/
+$ curl https://<NEWHOSTIP>/ -k
                                                                                                                                                 
-$ curl http://<NEWHOSTIP>:6443/
+$ curl https://<NEWHOSTIP>:6443/ -k
 ```
 
 6. Enjoy!
