@@ -18,8 +18,8 @@ curl -L https://raw.githubusercontent.com/costap/tunnel/master/scripts/install.s
 
 ## Usage
 
-The below example will proxy ports 443 and 6443 from the public host to local addresses 192.168.0.26:443 and 
-192.168.0.26:6443.
+The below example will proxy ports 443 and 6443 from the public host to local addresses 127.0.0.1:443 and 
+127.0.0.1:6443.
 
 1. setup a config file in `~/.tunnelctl.yaml` like `configs/tunnelctl.yaml`
 2. create ssh keys pair if you don't have one
