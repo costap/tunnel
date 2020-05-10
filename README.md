@@ -13,7 +13,7 @@ a ssh tunnel to the public host to tunnel the requests from envoy to your local 
 ## Install
 
 ```shell script
-go get github.com/costap/tunnel
+go get -u github.com/costap/tunnel
 ```
 
 ## Usage
@@ -53,6 +53,14 @@ $ curl http://localhost:8080/health
 $ curl http://localhost:8081/health
 { "started": true }
 ```
+
+5. Check external endpoints
+```shell script
+$ curl https://<NEWHOSTIP>/
+                                                                                                                                                
+$ curl http://<NEWHOSTIP>:6443/
+```
+
 6. Enjoy!
 
 ## Build

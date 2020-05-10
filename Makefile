@@ -36,6 +36,10 @@ gofmt: install-tools ## Go fmt your code
 		goimports -l -w $$package ; \
 	done
 
+dist: install-tools ## Creates binaries in multiple architectures for distribution
+	gox -output="dist/{{.Dir}}_{{.OS}}_{{.Arch}}" -arch="amd64 arm64 arm" ./...
+	ghr 0.2.0 dist/
+
 .PHONY: install-tools
 install-tools:
 	GOIMPORTS_CMD=$(shell command -v goimports 2> /dev/null)
