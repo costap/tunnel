@@ -51,7 +51,7 @@ bump-patch:
 release: dist
 	git commit -am "Bumps version"
 	git flow release start $(shell cat ./VERSION)
-	git flow relase finish $(shell cat ./VERSION)
+	git flow release finish $(shell cat ./VERSION)
 	ghr $(shell cat ./VERSION) dist/
 
 release-major: bump-major release ## Creates a new major release in github
