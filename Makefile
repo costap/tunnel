@@ -49,6 +49,7 @@ bump-patch:
 
 .PHONY: release
 release: dist
+	git commit -am "Bumps version"
 	git flow release start $(shell cat ./VERSION)
 	git flow relase finish $(shell cat ./VERSION)
 	ghr $(shell cat ./VERSION) dist/

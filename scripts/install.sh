@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=0.2.3
+VERSION=0.2.1
 OS=$(uname | tr '[:upper:]' '[:lower:]')
 ARCH_U=$(uname -m)
 if [ "$ARCH_U" == 'x86_64' ];
