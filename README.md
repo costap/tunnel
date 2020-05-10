@@ -36,12 +36,12 @@ _take note of new host external IP and replace <NEWHOSTIP> below_
 ```shell script
 nohup tunneld -c ~/.ssh/id_rsa_tunnel \
   --sshServer root@<NEWHOSTIP> \
-  --localAddr 192.168.0.26:443 \
+  --localAddr 127.0.0.1:443 \
   --remoteAddr 0.0.0.0:10443 \
   --adminPort 8080 > /dev/null 2>&1 & 
 nohup tunneld -c ~/.ssh/id_rsa_tunnel \
   --sshServer root@<NEWHOSTIP> \
-  --localAddr 192.168.0.26:6443 \
+  --localAddr 127.0.0.1:6443 \
   --remoteAddr 0.0.0.0:16443 \
   --adminPort 8081 > /dev/null 2>&1 & 
 ```
