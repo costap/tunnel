@@ -21,7 +21,7 @@ curl -L https://raw.githubusercontent.com/costap/tunnel/master/scripts/install.s
 The below example will proxy ports 443 and 6443 from the public host to local addresses 127.0.0.1:443 and 
 127.0.0.1:6443.
 
-1. setup a config file in `~/.tunnelctl.yaml` like `configs/tunnelctl.yaml`
+1. setup a config file in `~/.tunnelctl.yaml` like `configs/tunnelctl.yaml` with your DigitalOcean API token
 2. create ssh keys pair if you don't have one
 ```shell script
 tunnelctl keys create -p ~/.ssh -n id_rsa_tunnel
