@@ -16,6 +16,10 @@ func TestConfig_CloudConfigYaml(t *testing.T) {
 
 const cloudConfigExpected = `#cloud-config
 write_files:
+- content: "PermitRootLogin yes\nPasswordAuthentication no\nChallengeResponseAuthentication
+    no\nUsePAM yes\nX11Forwarding yes\nPrintMotd no\nClientAliveInterval 120\nClientAliveCountMax
+    720\nAcceptEnv LANG LC_*\nSubsystem\tsftp\t/usr/lib/openssh/sftp-server"
+  path: /etc/ssh/sshd_config
 - content: |2
 
     static_resources:
