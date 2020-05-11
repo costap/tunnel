@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"time"
 
 	"github.com/costap/tunnel/internal/app/tunneld"
 )
@@ -23,8 +25,9 @@ func main() {
 	http.HandleFunc("/", index)
 	http.HandleFunc("/health", health)
 	http.HandleFunc("/stop", stop)
+	http.HandleFunc("/restart", restart)
 
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v",c.AdminPort), nil))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", c.AdminPort), nil))
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
@@ -39,7 +42,7 @@ func health(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not supported.", http.StatusMethodNotAllowed)
 	}
 	if s.IsStarted() {
-		fmt.Fprint(w, "{ \"started\": true }")
+		fmt.Fprint(w, fmt.Sprintf("{ \"started\": true, \"connected\": %v }", s.IsConnected()))
 	} else {
 		http.Error(w, "{ \"started\": false }", http.StatusServiceUnavailable)
 	}
@@ -50,5 +53,14 @@ func stop(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not supported.", http.StatusMethodNotAllowed)
 	}
 	s.Stop()
-	fmt.Fprint(w, "STOPPING")
+	os.Exit(0)
+}
+
+func restart(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(w, "Method not supported.", http.StatusMethodNotAllowed)
+	}
+	s.Stop()
+	time.Sleep(100 * time.Millisecond)
+	go s.Run()
 }

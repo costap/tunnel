@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=0.2.2
+VERSION=0.3.0
 OS=$(uname | tr '[:upper:]' '[:lower:]')
 ARCH_U=$(uname -m)
 

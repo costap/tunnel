@@ -3,19 +3,22 @@ package tunneld
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/costap/tunnel/internal/pkg/tunnel"
 	"golang.org/x/crypto/ssh"
 )
 
 type Server struct {
-	running bool
-	started bool
-	config  *Config
+	running          bool
+	started          bool
+	config           *Config
+	sshClient        *ssh.Client
+	checkStatusSleep time.Duration
 }
 
 func NewServer(config *Config) *Server {
-	return &Server{running: false, started: false, config: config}
+	return &Server{running: false, started: false, config: config, checkStatusSleep: 1 * time.Second}
 }
 
 func (s *Server) Run() {
@@ -39,8 +42,8 @@ func (s *Server) Run() {
 
 		go tunnel.Start()
 		s.started = true
-		sshClient := <-tunnel.C
-		err := sshClient.Conn.Wait()
+		s.sshClient = <-tunnel.C
+		err := s.sshClient.Conn.Wait()
 		s.started = false
 		if err != nil {
 			tunnel.Log.Printf("server connection closed with error %v", err)
@@ -50,8 +53,17 @@ func (s *Server) Run() {
 
 func (s *Server) Stop() {
 	s.running = false
+	if err := s.sshClient.Close(); err != nil {
+		log.Printf("error closing connection %v", err)
+	}
+}
 
-	// TODO: close ssh connection and interrupt main thread.
+func (s *Server) IsConnected() bool {
+	if _, _, err := s.sshClient.Conn.SendRequest("keepalive@openssh.com", true, nil); err != nil {
+		log.Printf("error in keep alice request %v", err)
+		return err.Error() != "request failed"
+	}
+	return true
 }
 
 func (s *Server) IsRunning() bool {
@@ -60,4 +72,15 @@ func (s *Server) IsRunning() bool {
 
 func (s *Server) IsStarted() bool {
 	return s.started
+}
+
+func (s *Server) checkStatus() {
+	for s.running {
+		time.Sleep(s.checkStatusSleep)
+		if !s.IsConnected() {
+			s.Stop()
+			time.Sleep(100 * time.Millisecond)
+			s.Run()
+		}
+	}
 }

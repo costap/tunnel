@@ -20,6 +20,7 @@ func (c *Config) CloudConfigYaml() string {
 			Content string `yaml:"content"`
 			Path    string `yaml:"path"`
 		}{
+			{Content: sshdConfig, Path: "/etc/ssh/sshd_config"},
 			{Content: c.ToYaml(), Path: "/etc/envoy/config.yaml"},
 		},
 		RunCMD: [][]string{
@@ -33,3 +34,14 @@ func (c *Config) CloudConfigYaml() string {
 	}
 	return "#cloud-config\n" + string(d)
 }
+
+const sshdConfig = "PermitRootLogin yes\n" +
+					"PasswordAuthentication no\n" +
+					"ChallengeResponseAuthentication no\n" +
+					"UsePAM yes\n" +
+					"X11Forwarding yes\n" +
+					"PrintMotd no\n" +
+					"ClientAliveInterval 120\n" +
+					"ClientAliveCountMax 720\n" +
+					"AcceptEnv LANG LC_*\n" +
+					"Subsystem	sftp	/usr/lib/openssh/sftp-server"
