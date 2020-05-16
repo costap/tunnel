@@ -20,12 +20,14 @@ func (c *Config) CloudConfigYaml() string {
 			Content string `yaml:"content"`
 			Path    string `yaml:"path"`
 		}{
+			{Content: openfiles, Path: "/etc/security/limits.conf"},
 			{Content: sshdConfig, Path: "/etc/ssh/sshd_config"},
 			{Content: c.ToYaml(), Path: "/etc/envoy/config.yaml"},
 		},
 		RunCMD: [][]string{
 			{"sh", "-c", "curl -L https://getenvoy.io/cli | bash -s -- -b /usr/local/bin"},
-			{"sh", "-c", "getenvoy run standard:1.14.1 -- --config-path /etc/envoy/config.yaml"},
+			// TODO: Set envoy with systemctl
+			{"sh", "-c", "nohup getenvoy run standard:1.14.1 -- --config-path /etc/envoy/config.yaml > /dev/null 2>&1 &"},
 		},
 	}
 	d, err := yaml.Marshal(&t)
@@ -34,6 +36,12 @@ func (c *Config) CloudConfigYaml() string {
 	}
 	return "#cloud-config\n" + string(d)
 }
+
+const openfiles = `*         hard    nofile      500000
+*         soft    nofile      500000
+root      hard    nofile      500000
+root      soft    nofile      500000
+`
 
 const sshdConfig = "PermitRootLogin yes\n" +
 					"PasswordAuthentication no\n" +

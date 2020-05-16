@@ -1,6 +1,10 @@
 package envoy
 
-import "testing"
+import (
+	"fmt"
+	"io/ioutil"
+	"testing"
+)
 
 func TestConfig_CloudConfigYaml(t *testing.T) {
 	c := NewConfig().AddTCPProxy(TCPProxy{
@@ -10,12 +14,24 @@ func TestConfig_CloudConfigYaml(t *testing.T) {
 	})
 	yaml := c.CloudConfigYaml()
 	if yaml != cloudConfigExpected {
+		if err := ioutil.WriteFile("./TestConfig_CloudConfigYaml_expected.txt", []byte(cloudConfigExpected), 0644); err != nil {
+			fmt.Printf("error writing expected to file: %v", err)
+		}
+		if err := ioutil.WriteFile("./TestConfig_CloudConfigYaml_found.txt", []byte(yaml), 0644); err != nil {
+			fmt.Printf("error writing actual to file: %v", err)
+		}
 		t.Errorf("expected:[\n%v\n]\nfound:[\n%v\n]", cloudConfigExpected, yaml)
 	}
 }
 
 const cloudConfigExpected = `#cloud-config
 write_files:
+- content: |
+    *         hard    nofile      500000
+    *         soft    nofile      500000
+    root      hard    nofile      500000
+    root      soft    nofile      500000
+  path: /etc/security/limits.conf
 - content: "PermitRootLogin yes\nPasswordAuthentication no\nChallengeResponseAuthentication
     no\nUsePAM yes\nX11Forwarding yes\nPrintMotd no\nClientAliveInterval 120\nClientAliveCountMax
     720\nAcceptEnv LANG LC_*\nSubsystem\tsftp\t/usr/lib/openssh/sftp-server"
@@ -61,5 +77,6 @@ runcmd:
   - curl -L https://getenvoy.io/cli | bash -s -- -b /usr/local/bin
 - - sh
   - -c
-  - getenvoy run standard:1.14.1 -- --config-path /etc/envoy/config.yaml
+  - nohup getenvoy run standard:1.14.1 -- --config-path /etc/envoy/config.yaml > /dev/null
+    2>&1 &
 `
