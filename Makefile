@@ -53,7 +53,7 @@ release: dist
 	git flow release start $(shell cat ./VERSION)
 	git flow release finish $(shell cat ./VERSION)
 	git push
-	git push --tags
+	git push --tags --force
 	ghr $(shell cat ./VERSION) dist/
 	git checkout master
 	git push
